@@ -1,0 +1,127 @@
+---
+title: "a3_task4_karla_garibay"
+author: "Karla Garibay Garcia"
+date: "11/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(janitor)
+library(here)
+library(kableExtra)
+library(lubridate)
+```
+
+## Summary: In this document, I will be # TODO
+
+
+## Attach packages
+
+Here, I attach tidyverse, janitor, here, kableExtra, and lubridate packages in the setup code chunk. 
+
+
+## Read in data
+
+Here, I read in the urchins.csv data from the data folder. 
+
+```{r}
+urchins.csv <- read.csv(here("data", "urchins.csv"))
+```
+
+## Clean up data
+
+Here, I use clean_names() to switch all column names into lower_snake_case. 
+
+```{r}
+urchins_clean <- urchins.csv %>% clean_names()
+```
+
+## Data wrangling
+
+Here, I create a subset of the urchins data called naples_urchins that: 
+
+- Only retains observations from Naples Reef from January 2010
+
+```{r, warning = FALSE, message = FALSE}
+naples_urchins <- urchins_clean %>% 
+  filter(site == "NAPL") %>%
+  mutate(date_new = mdy(date)) %>% 
+  mutate(month = month(date_new)) %>% 
+  mutate(year = year(date_new)) %>% 
+  filter(month == 1) %>% 
+  filter(year == 2010)
+```
+
+## Exploratory data visualization 
+
+Here, I use a faceted histrogram and boxplot to compare the distribution of the Annual and Control treatments to assess normality. 
+
+```{r}
+ggplot(data = naples_urchins, 
+       aes(x = size)) + 
+  geom_histogram(bins = 15) +
+  labs(x = "Size(cm)", 
+       y = "Count") +
+  facet_wrap(~treatment)
+```
+
+```{r}
+ggplot(data = naples_urchins, 
+       aes(x = treatment, 
+           y = size)) +
+  geom_boxplot() +
+  labs(x = "Treatment type", 
+       y = "Size(cm)")
+```
+
+### Takeaways from exploratory data visualization # TODO
+
+
+## Descriptive statistics table
+
+Here, I create a summary table that contains the mean, median, standard deviation, and sample size statistics for Annual and Control treatments. 
+
+```{r, warning = FALSE, message=FALSE}
+tx_stats <- naples_urchins %>% 
+  group_by(treatment) %>% 
+  summarise(mean_size = mean(size), 
+            median_size = median(size),
+            sd_size = sd(size), 
+            n = n())
+
+tx_stats %>% 
+  kbl() %>% 
+  kable_styling()
+```
+
+## Two-sample t-test
+
+Here, I perform a two-sample t-test to compare means between the Annual and Control treatment groups by:
+
+- Filtering to only contain observations for annual and control samples from naples_urchins
+- Using the pull() function to only pull the values in the size column and store them as vectors for both samples
+
+```{r}
+annual_sample <- naples_urchins %>% 
+  filter(treatment == "ANNUAL") %>% 
+  pull(size)
+
+control_sample <- naples_urchins %>% 
+  filter(treatment == "CONTROL") %>% 
+  pull(size)
+
+t.test(x = annual_sample, control_sample)
+```
+
+### Takeaways from two-sample t-test #TODO
+
+
+
+## P-value meaning #TODO
+
+
+
+
+
