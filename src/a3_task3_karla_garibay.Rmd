@@ -1,0 +1,71 @@
+---
+title: "a3_task3_karla_garibay"
+author: "Karla Garibay Garcia"
+date: "11/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(janitor)
+library(here)
+library(kableExtra)
+```
+
+## Summary: In this document, I will be using version control, project management and data wranging, analysis and visualization skills to explore red and purple urchin data (urchins.csv) recorded by Santa Barbara Coastal Long Term Ecological Research program divers. 
+
+## Attach packages
+
+Here, I attach tidyverse, janitor and here packages in the setup code chunk. 
+
+
+## Read in data
+
+Here, I read in the urchins.csv data from the data folder. 
+
+```{r}
+urchins.csv <- read.csv(here("data", "urchins.csv"))
+```
+
+## Clean up data
+
+Here, I use clean_names() to switch all column names into lower_snake_case. 
+
+```{r}
+urchins_clean <- urchins.csv %>% clean_names()
+```
+
+## Section 1
+
+### i. Exploratory data visualization
+
+Here, I use a faceted histrogram and boxplot to compare the distribution of sizes between purple and red urchins. 
+
+```{r}
+ggplot(data = urchins_clean, 
+       aes(x = size)) + 
+  geom_histogram(bins = 25) +
+  labs(x = "Size(cm)", 
+       y = "Count") +
+  facet_wrap(~common_name)
+```
+
+```{r}
+ggplot(data = urchins_clean, 
+       aes(x = common_name, 
+           y = size)) +
+  geom_boxplot() +
+  labs(x = "Urchin type", 
+       y = "Size(cm)")
+```
+
+### ii. Descriptive statistics table
+
+Here, I create a summary table that contains the mean, median, standard deviation, and sample size statistics for purple and red urchins. 
+
+
+
+
+
+
