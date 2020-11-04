@@ -46,7 +46,7 @@ Here, I use a faceted histrogram and boxplot to compare the distribution of size
 ```{r}
 ggplot(data = urchins_clean, 
        aes(x = size)) + 
-  geom_histogram(bins = 25) +
+  geom_histogram(bins = 30) +
   labs(x = "Size(cm)", 
        y = "Count") +
   facet_wrap(~common_name)
@@ -79,9 +79,9 @@ urchin_stats %>%
  
 ```
 
-### iii. Takeaways 
+### iii. Takeaways
 
-The size (distribution, central tendency, spread, etc.) between purple and red urchins is X. The actual and % difference in mean urchin diameter between purple and red urchins are X. #TODO
+The purple urchin sample is slightly larger in diameter size and the distribution is skewed right, with a concentration of data among the smaller sizes and a slight tail on the right, while the red urchin sample is more normally distributed, but has more outliers on the right. The purple urchin data range from roughly 3-9cm and have a median of 4.5cm, both of which are smaller than red urchin data, ranging from roughly 3-15cm and with a median of 7cm. The red urchin mean is roughly 2.1cm larger than that of purple urchins, and the % difference in means (calculated by dividing the difference in means by the average of the two means and multiplying by 100) is roughly 41%. This value is relatively low, meaning that there is a low chance that the means for red and purple urchin diameter are different in size. 
 
 
 ## Section 2: Exploring purple urchin counts by size and year
