@@ -14,15 +14,15 @@ library(kableExtra)
 library(lubridate)
 ```
 
-## Summary: In this document, I will be # TODO
+## Summary: In this document, I will be using version control, project management and data wranging, analysis, visualization, and statistics skills to compare the maen size of purple urchins in two sections of Naples Reef in January 2010. 
 
 
-## Attach packages
+## 1. Attach packages
 
 Here, I attach tidyverse, janitor, here, kableExtra, and lubridate packages in the setup code chunk. 
 
 
-## Read in data
+## 2. Read in data
 
 Here, I read in the urchins.csv data from the data folder. 
 
@@ -30,7 +30,7 @@ Here, I read in the urchins.csv data from the data folder.
 urchins.csv <- read.csv(here("data", "urchins.csv"))
 ```
 
-## Clean up data
+## 3. Clean up data
 
 Here, I use clean_names() to switch all column names into lower_snake_case. 
 
@@ -38,7 +38,7 @@ Here, I use clean_names() to switch all column names into lower_snake_case.
 urchins_clean <- urchins.csv %>% clean_names()
 ```
 
-## Data wrangling
+## 4. Data wrangling
 
 Here, I create a subset of the urchins data called naples_urchins that: 
 
@@ -54,14 +54,14 @@ naples_urchins <- urchins_clean %>%
   filter(year == 2010)
 ```
 
-## Exploratory data visualization 
+## 5. Exploratory data visualization 
 
 Here, I use a faceted histrogram and boxplot to compare the distribution of the Annual and Control treatments to assess normality. 
 
 ```{r}
 ggplot(data = naples_urchins, 
        aes(x = size)) + 
-  geom_histogram(bins = 15) +
+  geom_histogram(bins = 11) +
   labs(x = "Size(cm)", 
        y = "Count") +
   facet_wrap(~treatment)
@@ -76,10 +76,12 @@ ggplot(data = naples_urchins,
        y = "Size(cm)")
 ```
 
-### Takeaways from exploratory data visualization # TODO
+### Takeaways from exploratory data visualization 
+
+Neither the annual nor control samples have traditionally normal distributions. The annual distribution is skewed right, while the annual seems to have two modes, with the majority of data concentrated on the right side and an outlier on the right as well. The annual sample has a larger range than the control sample, and a slightly lower mean.  
 
 
-## Descriptive statistics table
+## 6. Descriptive statistics table
 
 Here, I create a summary table that contains the mean, median, standard deviation, and sample size statistics for Annual and Control treatments. 
 
@@ -88,7 +90,7 @@ tx_stats <- naples_urchins %>%
   group_by(treatment) %>% 
   summarise(mean_size = mean(size), 
             median_size = median(size),
-            sd_size = sd(size), 
+            sd_size = sd(size),
             n = n())
 
 tx_stats %>% 
@@ -96,7 +98,7 @@ tx_stats %>%
   kable_styling()
 ```
 
-## Two-sample t-test
+## 7. Two-sample t-test
 
 Here, I perform a two-sample t-test to compare means between the Annual and Control treatment groups by:
 
@@ -117,10 +119,12 @@ t.test(x = annual_sample, control_sample)
 
 ### Takeaways from two-sample t-test #TODO
 
+The 2-sample t-test is essentially testing to see how different the means from the annual and control samples are. From the confidence interval, I can see that there's a 95% probability that the two means are at least -.2034569 and at most 0.644892 different if they were drawn the annual and control populations with the same mean. The actual difference in means is 0.220766, which lies within that confidence interval and is really low. The data for annual and control populations are not super skewed and the standard deviations don't vary by much, which leads me to believe there is a high probability that the annual and control populations have the same mean. 
 
 
-## P-value meaning #TODO
+## 8. P-value meaning
 
+The high p-value means I have less evidence that my annual and control samples means were drawn from populations with different means. 
 
 
 
