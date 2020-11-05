@@ -42,11 +42,12 @@ urchins_clean <- urchins.csv %>% clean_names()
 
 Here, I create a subset of the urchins data called naples_urchins that: 
 
-- Only retains observations from Naples Reef from January 2010
+- Only retains observations for Purple Urchins from Naples Reef from January 2010
 
 ```{r, warning = FALSE, message = FALSE}
 naples_urchins <- urchins_clean %>% 
-  filter(site == "NAPL") %>%
+  filter(site == "NAPL",
+         common_name == "Purple Urchin") %>%
   mutate(date_new = mdy(date)) %>% 
   mutate(month = month(date_new)) %>% 
   mutate(year = year(date_new)) %>% 
@@ -61,7 +62,7 @@ Here, I use a faceted histrogram and boxplot to compare the distribution of the 
 ```{r}
 ggplot(data = naples_urchins, 
        aes(x = size)) + 
-  geom_histogram(bins = 11) +
+  geom_histogram(bins = 20) +
   labs(x = "Size(cm)", 
        y = "Count") +
   facet_wrap(~treatment)
@@ -69,16 +70,14 @@ ggplot(data = naples_urchins,
 
 ```{r}
 ggplot(data = naples_urchins, 
-       aes(x = treatment, 
-           y = size)) +
-  geom_boxplot() +
-  labs(x = "Treatment type", 
-       y = "Size(cm)")
+       aes(sample = size)) +
+  geom_qq() +
+  facet_wrap(~treatment)
 ```
 
 ### Takeaways from exploratory data visualization 
 
-Neither the annual nor control samples have traditionally normal distributions. The annual distribution is skewed right, while the annual seems to have two modes, with the majority of data concentrated on the right side and an outlier on the right as well. The annual sample has a larger range than the control sample, and a slightly lower mean.  
+While it's tough to determine from the histogram, the QQ plot's linear relationship shows that the annual and control samples have relatively normal distributions, but both might have outliers on the right. Both samples appear to have two modes and a concentration of data on the left side. 
 
 
 ## 6. Descriptive statistics table
@@ -119,7 +118,7 @@ t.test(x = annual_sample, control_sample)
 
 ### Takeaways from two-sample t-test #TODO
 
-The 2-sample t-test is essentially testing to see how different the means from the annual and control samples are. From the confidence interval, I can see that there's a 95% probability that the two means are at least -.2034569 and at most 0.644892 different if they were drawn the annual and control populations with the same mean. The actual difference in means is 0.220766, which lies within that confidence interval and is really low. The data for annual and control populations are not super skewed and the standard deviations don't vary by much, which leads me to believe there is a high probability that the annual and control populations have the same mean. 
+The 2-sample t-test is essentially testing to see how different the means from the annual and control samples are. From the confidence interval, I can see that there's a 95% probability that the two means are at least -.1386165 and at most 0.5203369 different if they were drawn the annual and control populations with the same mean. The actual difference in means is .190861, which lies within that confidence interval and is really low. The data for annual and control populations are not super spread and the standard deviations don't vary by much, which leads me to believe there is a high probability that the annual and control populations have the same mean. 
 
 
 ## 8. P-value meaning
